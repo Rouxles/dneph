@@ -39,12 +39,14 @@ function waverage(times,magnitude) {
     
 }
 
-function accuracy(times) {
-    
+function DNFCount(times) {
+    dnf = times.filter(e => e.includes("DNF"))
+    return dnf.length
 }
 
 function main() {
    let time_list = readAverage()
    let weighted_floor = weightedFloor(time_list)
-   console.log(time_list, weighted_floor)
+   let dnf_count = DNFCount(time_list)
+   console.log(time_list)
 }
