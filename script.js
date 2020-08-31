@@ -51,13 +51,16 @@ function average(times,magnitude) {
         let len = arr.length;
         let bounds = Math.ceil(0.05*arr.length);
         arr.sort();
+        console.log(arr);
         if (bounds !== 0) {
             for(let i = 0; i<bounds; i++) {
                 arr.shift();
                 arr.pop();
             }
         }
+        console.log(arr);
         if(arr.some(DNFCheck)) {
+            console.log(arr);
             return "DNF";
         } else {
             return (arr.reduce((a,b) => Number(a)+Number(b))/arr.length);
@@ -65,11 +68,9 @@ function average(times,magnitude) {
     }
     let best = aox(times.slice(0,magnitude));
     for(let i = 1;i<times.length-magnitude;i++) {
-        if(!times.slice(i,i+magnitude).some(DNFCheck)) {
-            current = aox(times.slice(i,i+magnitude))
-            if(current < best || best == "DNF") {
-                best = current;
-            }
+        current = aox(times.slice(i,i+magnitude))
+        if(current < best || best == "DNF") {
+            best = current;
         }
     }
     best = Math.round(best*100)/100
@@ -113,7 +114,6 @@ function waverage(times) {
             times.pop();
         }
     }
-    console.log(times);
     if(!times.some(DNFCheck)) {
         stats(`Weighted Truncated Average`, Math.round(sum(times)*100/times.length)/100, "weighted_stats");
     }
