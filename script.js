@@ -1,4 +1,5 @@
-var averageString = ""
+let average_values = [5,12,25,50,100,1000];
+let ids = ["global", "normal"];
 
 function readAverage() {
     let separators = [" +","="]
@@ -20,7 +21,7 @@ function readAverage() {
 }
 
 function weightedFloor(times) {
-    return Math.floor(times.length/2)
+    return Math.floor(times.length/2);
 }
 
 function mean(times,magnitude) {
@@ -39,14 +40,53 @@ function waverage(times,magnitude) {
     
 }
 
+function gmean(times) {
+    let time_list = times.filter(e => !e.includes("DNF"));
+    let sum = time_list.reduce((a,b) => Number(a)+Number(b));
+    globalStats("Mean (Without DNFs)", Math.round(sum*100/time_list.length)/100);
+}
+
+function gaverage(times) {
+    let time_list = times.filter(e => !e.includes("DNF"));
+    let bounds = Math.floor(0.05*time_list.length);
+    time_list.sort((a, b) => a - b);
+    if (bounds !== 0) {
+        for(let i = 0; i<bounds; i++) {
+            time_list.shift();
+            time_list.pop();
+        }
+    }
+    let sum = time_list.reduce((a,b) => Number(a)+Number(b));
+    globalStats("Truncated Average (Without DNFs)", Math.round(sum*100/time_list.length)/100)
+}
+
 function DNFCount(times) {
-    dnf = times.filter(e => e.includes("DNF"))
-    return dnf.length
+    dnf = times.filter(e => e.includes("DNF"));
+    return dnf.length;
+}
+
+function globalStats(type, time) {
+    let d = document.getElementById("global_stats");
+    let li = document.createElement("LI");
+    let p = document.createElement("P");
+    let t = document.createTextNode(`${type}: ${time}`);
+    li.appendChild(t);
+    d.appendChild(li)
+}
+
+function clearStats(ids) {
+    let i;
+    ids.forEach(i => {
+        document.getElementById(`${i}_container`).innerHTML = `<ul id="${i}_stats"></ul>`;
+    })
 }
 
 function main() {
-   let time_list = readAverage()
-   let weighted_floor = weightedFloor(time_list)
-   let dnf_count = DNFCount(time_list)
-   console.log(time_list)
+    clearStats(ids);
+    let time_list = readAverage();
+    let global_mean = gmean(time_list);
+    let global_average = gaverage(time_list);
+    let weighted_floor = weightedFloor(time_list);
+    let dnf_count = DNFCount(time_list);
+    console.log(global_mean, global_average);
 }
