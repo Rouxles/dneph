@@ -176,8 +176,4 @@ function main() {
             average(time_list, a);
         }
     })
-    
-    // let weighted_floor = weightedFloor(time_list);
-    let dnf_count = DNFCount(time_list);
-    // console.log(global_mean, global_average);
 }
