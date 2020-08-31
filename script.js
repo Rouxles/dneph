@@ -1,5 +1,5 @@
 let average_values = [5,12,25,50,100,1000];
-let ids = ["global", "normal"];
+let ids = ["global", "weighted", "best"];
 
 function readAverage() {
     let separators = [" +","="]
@@ -20,26 +20,18 @@ function readAverage() {
     return times;
 }
 
-// function weightedFloor(times) {
-//     return Math.floor(times.length/2);
-// }
-
-function DNFCheck(arr) {
-    for(let i=0;i<arr.length;i++) {
-        if (arr[i].includes("DNF")) {
-            return true;
-        }
-    }
-    return false;    
+function DNFCheck(e) {
+    return e.includes("DNF");
 }
 
 function mean(times,magnitude) {
+    times = times.slice(0)
     let sum = (arr) => {
         return arr.reduce((a,b) => Number(a)+Number(b));
     }
-    let best = DNFCheck(times.slice(0,magnitude)) ? "DNF":sum(times.slice(0,magnitude))/magnitude;
+    let best = times.slice(0,magnitude).some(DNFCheck) ? "DNF":sum(times.slice(0,magnitude))/magnitude;
     for(let i = 1;i<times.length-magnitude;i++) {
-        if(!DNFCheck(times.slice(i,i+magnitude))) {
+        if(!times.slice(i,i+magnitude).some(DNFCheck)) {
             current = sum(times.slice(i,i+magnitude))/magnitude
             if(current < best || best == "DNF") {
                 best = current;
@@ -54,6 +46,7 @@ function mean(times,magnitude) {
 }
 
 function average(times,magnitude) {
+    times = times.slice(0)
     let aox = (arr) => {
         let len = arr.length;
         let bounds = Math.ceil(0.05*arr.length);
@@ -64,7 +57,7 @@ function average(times,magnitude) {
                 arr.pop();
             }
         }
-        if(DNFCheck(arr)) {
+        if(arr.some(DNFCheck)) {
             return "DNF";
         } else {
             return (arr.reduce((a,b) => Number(a)+Number(b))/arr.length);
@@ -72,7 +65,7 @@ function average(times,magnitude) {
     }
     let best = aox(times.slice(0,magnitude));
     for(let i = 1;i<times.length-magnitude;i++) {
-        if(!DNFCheck(times.slice(i,i+magnitude))) {
+        if(!times.slice(i,i+magnitude).some(DNFCheck)) {
             current = aox(times.slice(i,i+magnitude))
             if(current < best || best == "DNF") {
                 best = current;
@@ -85,21 +78,56 @@ function average(times,magnitude) {
     }
 }
 
-function wmean(times,magnitude) {
-
+function wmean(times) {
+    times = times.slice(0)
+    let sum = (arr) => {
+        return arr.reduce((a,b) => Number(a)+Number(b));
+    }
+    half_length = Math.ceil(times.length/2)
+    times.sort()
+    for(let i = 0; i<half_length; i++) {
+        times.pop()
+    }
+    if(!times.some(DNFCheck)) {
+        stats(`Weighted Mean`, Math.round(sum(times)*100/times.length)/100, "weighted_stats")
+    }
 }
 
-function waverage(times,magnitude) {
+function waverage(times) {
+    times = times.slice(0)
+    // console.log(times);
+    let sum = (arr) => {
+        return arr.reduce((a,b) => Number(a)+Number(b));
+    }
+    half_length = Math.ceil(times.length/2);
+    times.sort();
+    // console.log(times);
+    for(let i = 0; i<half_length; i++) {
+        times.pop();
+    }
     
+    let bounds = Math.ceil(0.05*times.length);
+    if (bounds !== 0) {
+        for(let i = 0; i<bounds; i++) {
+            times.shift();
+            times.pop();
+        }
+    }
+    console.log(times);
+    if(!times.some(DNFCheck)) {
+        stats(`Weighted Truncated Average`, Math.round(sum(times)*100/times.length)/100, "weighted_stats");
+    }
 }
 
 function gmean(times) {
+    times = times.slice(0)
     let time_list = times.filter(e => !e.includes("DNF"));
     let sum = time_list.reduce((a,b) => Number(a)+Number(b));
     stats("Mean (Without DNFs)", Math.round(sum*100/time_list.length)/100, "global_stats");
 }
 
 function gaverage(times) {
+    times = times.slice(0)
     let time_list = times.filter(e => !e.includes("DNF"));
     let bounds = Math.ceil(0.05*time_list.length);
     time_list.sort((a, b) => a - b);
@@ -113,13 +141,13 @@ function gaverage(times) {
     stats("Truncated Average (Without DNFs)", Math.round(sum*100/time_list.length)/100, "global_stats")
 }
 
-function DNFCount(times) {
-    dnf = times.filter(e => e.includes("DNF"));
+function NotDNFCount(times) {
+    dnf = times.filter(e => !e.includes("DNF"));
     return dnf.length;
 }
 
 function stats(type, time, id) {
-    let d = document.getElementById("global_stats");
+    let d = document.getElementById(id);
     let li = document.createElement("LI");
     let p = document.createElement("P");
     let t = document.createTextNode(`${type}: ${time}`);
@@ -140,8 +168,13 @@ function main() {
     gmean(time_list);
     gaverage(time_list);
     mean(time_list, 3);
+    wmean(time_list);
+    waverage(time_list);
+    stats("Accuracy", `${Math.floor((NotDNFCount(time_list)*10000/time_list.length))/100}%`, "global_stats")
     average_values.forEach((a) => {
-        average(time_list, a);
+        if(time_list.length >= a) {
+            average(time_list, a);
+        }
     })
     
     // let weighted_floor = weightedFloor(time_list);
