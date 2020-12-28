@@ -17,7 +17,10 @@ function readAverage() {
         }
     }
     times_array = elements.filter(element => (!isNaN(element) && element.slice(-1) !== ".") || element.includes("DNF") && element !== "");
-    times_array.pop()
+    console.log(times_array);
+    if (times_array[times_array.length-1] === "") {
+        times_array.pop()
+    }
     return times_array;
 }
 
@@ -51,7 +54,7 @@ function average(times,magnitude) {
     let aox = (arr) => {
         let len = arr.length;
         let bounds = Math.ceil(0.05*arr.length);
-        arr.sort();
+        arr.sort(function(a, b){return a-b});
         if (bounds !== 0) {
             for(let i = 0; i<bounds; i++) {
                 arr.shift();
@@ -83,7 +86,8 @@ function wmean(times) {
         return arr.reduce((a,b) => Number(a)+Number(b));
     }
     half_length = Math.ceil(times.length/2)
-    times.sort()
+    console.log(half_length)
+    times.sort(function(a, b){return a-b})
     for(let i = 0; i<half_length; i++) {
         times.pop()
     }
@@ -98,7 +102,7 @@ function waverage(times) {
         return arr.reduce((a,b) => Number(a)+Number(b));
     }
     half_length = Math.ceil(times.length/2);
-    times.sort();
+    times.sort(function(a, b){return a-b});
     for(let i = 0; i<half_length; i++) {
         times.pop();
     }
@@ -126,7 +130,7 @@ function gaverage(times) {
     times = times.slice(0)
     let time_list = times.filter(e => !e.includes("DNF"));
     let bounds = Math.ceil(0.05*time_list.length);
-    time_list.sort((a, b) => a - b);
+    time_list.sort(function(a, b){return a-b});
     if (bounds !== 0) {
         for(let i = 0; i<bounds; i++) {
             time_list.shift();
