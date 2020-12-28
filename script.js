@@ -6,8 +6,7 @@ function readAverage() {
     let string = document.getElementById("average").value;
     let times = string.split("Time List:");
     times = times[times.length-1];
-    elements = times.replace(/[\(\)\+\,(\n)]+/g,'').replace(/\[.*\]+/g, " ").split(new RegExp(separators.join("|"),'g'));
-    console.log(elements.length, elements)
+    elements = times.replace(/@.*/g, " ").replace(/[\(\)\+\,(\n)]+/g,'').replace(/\[.*\]+/g, " ").split(new RegExp(separators.join("|"),'g'));
     for(let i=0;i<elements.length;i++) {
         if(elements[i].includes(":")) {
             values = elements[i].split(":");
@@ -17,9 +16,9 @@ function readAverage() {
             elements[i] = corrected;
         }
     }
-    times = elements.filter(element => (!isNaN(element) && element.slice(-1) !== ".") || element.includes("DNF") && element !== "");
-    console.log(times);
-    return times;
+    times_array = elements.filter(element => (!isNaN(element) && element.slice(-1) !== ".") || element.includes("DNF") && element !== "");
+    times_array.pop()
+    return times_array;
 }
 
 function DNFCheck(e) {
@@ -53,16 +52,13 @@ function average(times,magnitude) {
         let len = arr.length;
         let bounds = Math.ceil(0.05*arr.length);
         arr.sort();
-        console.log(arr);
         if (bounds !== 0) {
             for(let i = 0; i<bounds; i++) {
                 arr.shift();
                 arr.pop();
             }
         }
-        console.log(arr);
         if(arr.some(DNFCheck)) {
-            console.log(arr);
             return "DNF";
         } else {
             return (arr.reduce((a,b) => Number(a)+Number(b))/arr.length);
@@ -98,13 +94,11 @@ function wmean(times) {
 
 function waverage(times) {
     times = times.slice(0)
-    // console.log(times);
     let sum = (arr) => {
         return arr.reduce((a,b) => Number(a)+Number(b));
     }
     half_length = Math.ceil(times.length/2);
     times.sort();
-    // console.log(times);
     for(let i = 0; i<half_length; i++) {
         times.pop();
     }
@@ -167,15 +161,24 @@ function clearStats(ids) {
 function main() {
     clearStats(ids);
     let time_list = readAverage();
-    gmean(time_list);
-    gaverage(time_list);
-    mean(time_list, 3);
-    wmean(time_list);
-    waverage(time_list);
-    stats("Accuracy", `${Math.floor((NotDNFCount(time_list)*10000/time_list.length))/100}%`, "global_stats")
-    average_values.forEach((a) => {
-        if(time_list.length >= a) {
+    let length = time_list.length
+    if(length > 1) {
+        gmean(time_list);
+        gaverage(time_list);
+        mean(time_list, 3);
+        wmean(time_list);
+        waverage(time_list);
+        stats("Accuracy", `${Math.floor((NotDNFCount(time_list)*10000/length))/100}%`, "global_stats")
+        stats("Solves/Attempts", `${NotDNFCount(time_list)}/${length}`, "global_stats")
+        average_values.forEach((a) => {
+        if(length >= a) {
             average(time_list, a);
         }
     })
+    } else if(length == 1 && !isNaN(time_list[0])){
+        gmean(time_list);
+        stats("Accuracy", `${Math.floor((NotDNFCount(time_list)*10000/length))/100}%`, "global_stats")
+        stats("Solves/Attempts", `${NotDNFCount(time_list)}/${length}`, "global_stats")
+    }
+    
 }
