@@ -6,7 +6,8 @@ function readAverage() {
     let string = document.getElementById("average").value;
     let times = string.split("Time List:");
     times = times[times.length-1];
-    elements = times.replace(/[\(\)\+\,(\n)]+/g,'').split(new RegExp(separators.join("|"),'g'));
+    elements = times.replace(/[\(\)\+\,(\n)]+/g,'').replace(/\[.*\]+/g, " ").split(new RegExp(separators.join("|"),'g'));
+    console.log(elements.length, elements)
     for(let i=0;i<elements.length;i++) {
         if(elements[i].includes(":")) {
             values = elements[i].split(":");
@@ -17,6 +18,7 @@ function readAverage() {
         }
     }
     times = elements.filter(element => (!isNaN(element) && element.slice(-1) !== ".") || element.includes("DNF") && element !== "");
+    console.log(times);
     return times;
 }
 
