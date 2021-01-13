@@ -49,8 +49,6 @@ function mean(times, magnitude) {
 
 }
 
-// TODO: Fix the logic in this function
-
 function average(times, magnitude) {
     times = times.slice(0)
     const aox = (arr) => {
@@ -59,7 +57,7 @@ function average(times, magnitude) {
             return !DNFCheck(e)
         })
         let bounds = Math.ceil(0.05 * len);
-        let dnf_count = len-no_dnf.len;
+        let dnf_count = len-no_dnf.length;
         let final_length = len-(bounds);
         if (no_dnf.length >= len - bounds) {
             no_dnf.sort(function (a, b) {
@@ -67,7 +65,7 @@ function average(times, magnitude) {
             });
 
             for(let i=0; i<dnf_count; i++) {
-                no_dnf.pop();
+                no_dnf.shift();
             }
 
             while(no_dnf.length > final_length) {
