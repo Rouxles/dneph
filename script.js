@@ -6,7 +6,7 @@ function readAverage() {
     let string = document.getElementById("average").value;
     let times = string.split("Time List:");
     times = times[times.length - 1];
-    elements = times.replace(/@.*/g, " ").replace(/[\(\)\+\,(\n)]+/g, '').replace(/\[.*\]+/g, " ").split(new RegExp(separators.join("|"), 'g'));
+    elements = times.replace(/@.*/g, " ").replace(/[\(\)\+\,(\n)]+/g, '').replace(/\[.*,+/g, " ").split(new RegExp(separators.join("|"), 'g'));
     for (let i = 0; i < elements.length; i++) {
         if (elements[i].includes(":")) {
             values = elements[i].split(":");
