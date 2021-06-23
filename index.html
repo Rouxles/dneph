@@ -1,58 +1,79 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>DNeph</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  </head>
-  <body>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="./script.js"></script>
+<head>
+  <title>DNeph</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <div class="jumbotron jumbotron-fluid">
-      <div class="container">
-        <h1 class="display-4">DNeph</h1>
-        <p class="lead">Zeph won't be able to get a weighted average can guarantee!</p>
-        <hr class="my-2">
-        <p>This is for those that want easier weighted averages (primarily for 3BLD/4BLD/5BLD)</p>
-        <p class="lead">
-          <button class="btn btn-primary" data-target="#weighted-avg-information" data-toggle="collapse">More information</button>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script src="./script.js"></script>
+
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">DNeph</h1>
+      <p class="lead">Zeph won't be able to get a weighted average can guarantee!</p>
+      <hr class="my-2">
+      <p>This is for those that want easier weighted averages (primarily for 3BLD/4BLD/5BLD)</p>
+      <p class="lead">
+        <button class="btn btn-primary" data-target="#weighted-avg-information" data-toggle="collapse">More
+          information</button>
+      </p>
+      <div id="weighted-avg-information" class="collapse">
+        <p>A weighted mean is essentially what you get when you DNF all your solves until your accuracy rate is at 50%,
+          and then the mean from there is calculated. A weighted average does the same thing but also truncates the
+          lower and upper 5% from the average.</p>
+        <p>A good number for weighted means would be 100 solves, but nothing's stopping you from doing more (or fewer)
         </p>
-        <div id="weighted-avg-information" class="collapse">
-          <p>A weighted mean is essentially what you get when you DNF all your solves until your accuracy rate is at 50%, and then the mean from there is calculated. A weighted average does the same thing but also truncates the lower and upper 5% from the average.</p>
-          <p>A good number for weighted means would be 100 solves, but nothing's stopping you from doing more (or fewer)</p>
-        </div>
       </div>
     </div>
+  </div>
 
-    <div class="container-fluid">
-      <div class="form-group">
-        <label for=""></label>
-        <textarea class="form-control" name="" id="average" rows="5" placeholder="Paste average from CSTimer"></textarea>
-      </div>
-
-      <a class="btn btn-primary" href="#" role="button" onclick="main()">Calculate Stats</a>
+  <div class="container-fluid">
+    <div class="form-group">
+      <label for=""></label>
+      <textarea class="form-control" name="" id="average" rows="5" placeholder="Paste average from CSTimer"></textarea>
     </div>
 
-    <div class="container-fluid" id="global_container">
-      <ul id="global_stats"></ul>
-    </div>
+    <a class="btn btn-primary" href="#" role="button" onclick="main()">Calculate Stats</a>
+  </div>
 
-    <div class="container-fluid" id="weighted_container">
-      <ul id="weighted_stats"></ul>
-    </div>
+  <div class="container-fluid" id="global_container">
+    <ul id="global_stats"></ul>
+  </div>
 
-    <div class="container-fluid" id="best_container">
-      <ul id="best_stats"></ul>
-    </div>
+  <div class="container-fluid" id="weighted_container">
+    <ul id="weighted_stats"></ul>
+  </div>
 
-  </body>
+  <div class="container-fluid" id="best_container">
+    <ul id="best_stats"></ul>
+  </div>
+
+  <div id="best_weighted_container" class="container-fluid">
+    <ul id="best_weighted_stats"></ul>
+  </div>
+
+  <div class="container-fluid" id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+</body>
+
 </html>
