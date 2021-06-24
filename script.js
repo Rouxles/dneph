@@ -216,7 +216,7 @@ function drawGraph(data) {
 
     let d = document.getElementById("chartContainer");
     let h = document.createElement("h3");
-    let t = document.createTextNode("Solve Distribution:");
+    let t = document.createTextNode("Best Weighted mo100 Solve Distribution:");
     d.appendChild(document.createElement("BR"));
     h.appendChild(t);
     d.appendChild(h);
@@ -256,10 +256,8 @@ function drawGraph(data) {
         // svg.append("g")
         //   .call(d3.axisLeft(y));
 
-        console.log(stdev(data))
-
         // Compute kernel density estimation
-        var kde = kernelDensityEstimator(kernelEpanechnikov(stdev(data)), x.ticks(20))
+        var kde = kernelDensityEstimator(kernelEpanechnikov(stdev(data)/2), x.ticks(20))
         var density = kde(data)
       
         // Plot the area
