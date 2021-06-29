@@ -201,6 +201,8 @@ function bestWeightedmo100(times) {
                 best = Math.round(sum(no_dnf) * 100 / no_dnf.length) / 100
                 best_index = i+1
             }
+        } else {
+            return
         }
     }
     stats(`Best Weighted Mean of 100`, best, "best_weighted_stats");
